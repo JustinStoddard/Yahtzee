@@ -1,7 +1,7 @@
-import React from 'react';
-import { Grid } from 'semantic-ui-react';
-import Board from './Board';
-import Scorecard from  './Scorecard';
+import React from 'react'
+import { Grid } from 'semantic-ui-react'
+import Board from './Board'
+import ScoreCard from './Scorecard'
 
 const styles = {
   fullHeight: { height: '100vh' },
@@ -9,23 +9,66 @@ const styles = {
   scores: { backgroundColor: '#9370DB' },
 }
 
-const Game = () => (
-  <Grid>
-    <Grid.Row>
-      <Grid.Column
-        width={10}
-        style={{...styles.fullHeight, ...styles.board }}
-      >
-        <Board />
-      </Grid.Column>
-      <Grid.Column
-        width={6}
-        style={{...styles.fullHeight, ...styles.scores}}
-      >
-        <Scorecard />
-      </Grid.Column>
-    </Grid.Row>
-  </Grid>
-)
+class Game extends React.Component {
+  state = {
+    roll: 0,
+    dice: [...new Array(5)],
+    keep: [],
+  }
 
-export default Game;
+  toggleKept = (i) => {
+    const { keep } = this.state;
+    let updatedKeep;
+    
+    if (keep.includes(i))
+      updatedKeep = keep.filter( k => k !== i )
+    else
+      updatedKeep = [...keep, i]
+
+    this.setState({ keep: updatedKeep })
+  }
+
+  rollDice = () => {
+    const { keep } = this.state;
+
+    const dice = this.state.dice.map( (el, i) => {
+      if (keep.includes(i))
+        return el
+      return Math.floor(Math.random() * 6) + 1
+    });
+
+    this.setState( state => {
+      return { dice, roll: state.roll + 1 }
+    })
+  }
+
+  render() {
+    const { roll, dice, keep } = this.state;
+    return (
+      <Grid>
+        <Grid.Row>
+          <Grid.Column
+            width={10}
+            style={{...styles.fullHeight, ...styles.board }}
+          >
+            <Board 
+              roll={roll}
+              dice={dice}
+              rollDice={this.rollDice}   
+              keep={keep}
+              toggleKept={this.toggleKept}         
+            />
+          </Grid.Column>
+          <Grid.Column
+            width={6}
+            style={{...styles.fullHeight, ...styles.scores}}
+          >
+            <ScoreCard />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    )
+  }
+}
+
+export default Game
