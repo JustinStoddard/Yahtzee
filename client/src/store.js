@@ -20,3 +20,5 @@ if (module.hot) {
     store.replaceReducer(nextRootReducer)
   })
 }
+
+export default store;

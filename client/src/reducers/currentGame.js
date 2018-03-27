@@ -1,4 +1,4 @@
-import { ROLL_DICE, TOGGLE_DICE } from '../actions/currentGame';
+import { ROLL_DICE, TOGGLE_KEPT } from '../actions/currentGame';
 
 const currentGame = (
   state = {
@@ -17,7 +17,7 @@ const currentGame = (
           roll: state.roll + 1 // This increments the state of roll everytime you push "ROLL DICE on the page".
         }
 
-      case TOGGLE_DICE:
+      case TOGGLE_KEPT:
         return {
           ...state,
           keep: action.keep  //
@@ -27,3 +27,5 @@ const currentGame = (
         return state
   }
 }
+
+export default currentGame;
